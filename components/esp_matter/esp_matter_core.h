@@ -633,6 +633,20 @@ typedef esp_err_t (*callback_t)(const ConcreteCommandPath &command_path, TLVRead
  */
 command_t *create(cluster_t *cluster, uint32_t command_id, uint8_t flags, callback_t callback);
 
+/** Destroy command
+ *
+ * Destroys the command present on the cluster.
+ *
+ *
+ * @param[in] cluster Cluster handle.
+ * @param[in] command_id Command ID for the command.
+ * @param[in] flags Command flags for the command to be fetched.
+ *
+ * @return ESP_OK on success.
+ * @return error in case of failure.
+ */
+esp_err_t destroy(cluster_t *cluster, uint32_t command_id, uint16_t flags);
+
 /** Get command
  *
  * Get the command present on the cluster.

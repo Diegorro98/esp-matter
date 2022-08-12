@@ -1266,6 +1266,42 @@ static esp_err_t destroy(command_t *command)
     return ESP_OK;
 }
 
+esp_err_t destroy(cluster_t *cluster, uint32_t command_id, uint16_t flags){
+    if (!cluster) {
+        ESP_LOGE(TAG, "Cluster cannot be NULL");
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    /* Find */
+    _cluster_t *current_cluster = (_cluster_t *)cluster;
+    _command_t *previous_command = NULL;
+    _command_t *current_command = (_command_t *)current_cluster->command_list;
+    while (current_command) {
+        if ((current_command->command_id == command_id) && (current_command->flags & flags)) {
+
+            /* Delete from command list */
+            if (previous_command == NULL) {
+                current_cluster->command_list = current_command->next;
+            } else {
+                previous_command->next = current_command->next;
+            }
+
+            /* Destroy */
+            command::destroy((command_t *)current_command);
+            break;
+        }
+        previous_command = current_command;
+        current_command = current_command->next;
+    }
+
+    if (!current_command) {
+        ESP_LOGE(TAG, "Command 0x%04x on cluster 0x%04x does not exist.", command_id, current_cluster->cluster_id);
+        return ESP_ERR_NOT_FOUND;
+    }
+
+    return ESP_OK;
+}
+
 command_t *get(cluster_t *cluster, uint32_t command_id, uint16_t flags)
 {
     if (!cluster) {
