@@ -1415,6 +1415,57 @@ cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
 }
 } /* window_covering */
 
+namespace barrier_control {
+const function_generic_t *function_list = NULL;
+const int function_flags = CLUSTER_FLAG_NONE;
+
+cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags)
+{
+    cluster_t *cluster = cluster::create(endpoint, BarrierControl::Id, flags);
+    if (!cluster) {
+        ESP_LOGE(TAG, "Could not create cluster");
+        return NULL;
+    }
+
+    if (flags & CLUSTER_FLAG_SERVER) {
+        set_plugin_server_init_callback(cluster, MatterBarrierControlPluginServerInitCallback);
+        add_function_list(cluster, function_list, function_flags);
+    }
+    if (flags & CLUSTER_FLAG_CLIENT) {
+        set_plugin_client_init_callback(cluster, MatterBarrierControlPluginClientInitCallback);
+        create_default_binding_cluster(endpoint);
+    }
+
+    if (flags & CLUSTER_FLAG_SERVER) {
+        /* Attributes managed internally */
+        global::attribute::create_feature_map(cluster, 0);
+
+        /* Attributes not managed internally */
+        if (config) {
+            global::attribute::create_cluster_revision(cluster, config->cluster_revision);
+            attribute::create_barrier_moving_state(cluster, config->barrier_moving_state);
+            attribute::create_barrier_safety_status(cluster, config->barrier_safety_status);
+            attribute::create_barrier_capabilities(cluster, config->barrier_capabilities);
+            attribute::create_barrier_open_events(cluster, config->barrier_open_events);
+            attribute::create_barrier_close_events(cluster, config->barrier_close_events);
+            attribute::create_barrier_command_open_events(cluster, config->barrier_command_open_events);
+            attribute::create_barrier_command_close_events(cluster, config->barrier_command_close_events);
+            attribute::create_barrier_open_period(cluster, config->barrier_open_period);
+            attribute::create_barrier_close_period(cluster, config->barrier_close_period);
+            attribute::create_barrier_position(cluster, config->barrier_position);
+        } else {
+            ESP_LOGE(TAG, "Config is NULL. Cannot add some attributes.");
+        }
+    }
+        
+    /* Commands */
+    command::create_barrier_control_go_to_percent(cluster);
+    command::create_barrier_control_stop(cluster);
+    
+    return cluster;
+}
+} /* barrier_control */
+
 namespace switch_cluster {
 const function_generic_t *function_list = NULL;
 const int function_flags = CLUSTER_FLAG_NONE;

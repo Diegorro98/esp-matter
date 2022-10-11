@@ -347,6 +347,27 @@ typedef struct config {
 cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
 } /* window_covering */
 
+namespace barrier_control{
+typedef struct config {
+    uint16_t cluster_revision;
+    uint8_t barrier_moving_state;
+    uint16_t barrier_safety_status;
+    uint8_t barrier_capabilities;
+    uint16_t barrier_open_events;
+    uint16_t barrier_close_events;
+    uint16_t barrier_command_open_events;
+    uint16_t barrier_command_close_events;
+    uint16_t barrier_open_period;
+    uint16_t barrier_close_period;
+    uint8_t barrier_position;
+    config() : cluster_revision(1), barrier_moving_state(0x00), barrier_safety_status(0), barrier_capabilities(0b00000001), barrier_open_events(0),
+                barrier_close_events(0), barrier_command_open_events(0), barrier_command_close_events(0), barrier_open_period(0), barrier_close_period(0),
+                barrier_position(0) {}
+} config_t;
+
+cluster_t *create(endpoint_t *endpoint, config_t *config, uint8_t flags);
+} /* barrier_control */
+
 namespace switch_cluster {
 typedef struct config {
     uint16_t cluster_revision;

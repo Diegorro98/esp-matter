@@ -239,6 +239,18 @@ uint8_t get_device_type_version();
 endpoint_t *create(node_t *node, config_t *config, uint8_t flags, void *priv_data);
 } /* window_covering */
 
+namespace barrier_control {
+typedef struct config {
+    cluster::identify::config_t identify;
+    cluster::scenes::config_t scenes;
+    cluster::barrier_control::config_t barrier_control;
+} config_t;
+
+uint32_t get_device_type_id();
+uint8_t get_device_type_version();
+endpoint_t *create(node_t *node, config_t *config, uint8_t flags, void *priv_data);
+} /* barrier_control */
+
 namespace temperature_sensor {
 typedef struct config {
     cluster::identify::config_t identify;

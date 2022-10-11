@@ -62,6 +62,8 @@
 #define ESP_MATTER_DOOR_LOCK_DEVICE_TYPE_VERSION 2
 #define ESP_MATTER_WINDOW_COVERING_DEVICE_TYPE_ID 0x0202
 #define ESP_MATTER_WINDOW_COVERING_DEVICE_TYPE_VERSION 2
+#define ESP_MATTER_BARRIER_CONTROL_DEVICE_TYPE_ID 0x0106
+#define ESP_MATTER_BARRIER_CONTROL_DEVICE_TYPE_VERSION 1
 
 static const char *TAG = "esp_matter_endpoint";
 
@@ -589,6 +591,36 @@ endpoint_t *create(node_t *node, config_t *config, uint8_t flags, void * priv_da
     return endpoint;
 }
 } /* window_covering */
+
+namespace barrier_control {
+uint32_t get_device_type_id()
+{
+    return ESP_MATTER_BARRIER_CONTROL_DEVICE_TYPE_ID;
+}
+
+uint8_t get_device_type_version()
+{
+    return ESP_MATTER_BARRIER_CONTROL_DEVICE_TYPE_VERSION;
+}
+
+endpoint_t *create(node_t *node, config_t *config, uint8_t flags, void *priv_data)
+{
+    endpoint_t *endpoint = endpoint::create(node, flags, priv_data);
+    if (!endpoint) {
+        ESP_LOGE(TAG, "Could not create endpoint");
+        return NULL;
+    }
+
+
+    add_device_type(endpoint, get_device_type_id(), get_device_type_version());
+
+    descriptor::create(endpoint, CLUSTER_FLAG_SERVER);
+    identify::create(endpoint, &(config->identify), CLUSTER_FLAG_SERVER);
+    cluster::barrier_control::create(endpoint, &(config->barrier_control), CLUSTER_FLAG_SERVER);
+
+    return endpoint;
+}
+} /* barrier_control */
 
 namespace temperature_sensor {
 uint32_t get_device_type_id()

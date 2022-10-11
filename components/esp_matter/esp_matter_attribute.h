@@ -364,6 +364,21 @@ attribute_t *create_safety_status(cluster_t *cluster, uint16_t value);
 } /* attribute */
 } /* window_covering */
 
+namespace barrier_control {
+namespace attribute {
+attribute_t *create_barrier_moving_state(cluster_t *cluster, uint8_t value);
+attribute_t *create_barrier_safety_status(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_capabilities(cluster_t *cluster, uint8_t value);
+attribute_t *create_barrier_open_events(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_close_events(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_command_open_events(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_command_close_events(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_open_period(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_close_period(cluster_t *cluster, uint16_t value);
+attribute_t *create_barrier_position(cluster_t *cluster, uint8_t value);
+} /* attribute */
+} /* barrier_control */
+
 namespace switch_cluster {
 namespace attribute {
 attribute_t *create_number_of_positions(cluster_t *cluster, uint8_t value);

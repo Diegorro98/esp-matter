@@ -1102,6 +1102,30 @@ static esp_err_t esp_matter_command_callback_go_to_tilt_percentage(const Concret
     return ESP_OK;
 }
 
+static esp_err_t esp_matter_command_callback_barrier_control_go_to_percent(const ConcreteCommandPath &command_path,
+                                                                           TLVReader &tlv_data, void *opaque_ptr)
+{
+    chip::app::Clusters::BarrierControl::Commands::BarrierControlGoToPercent::DecodableType command_data;
+    CHIP_ERROR error = Decode(tlv_data, command_data);
+    if (error == CHIP_NO_ERROR) {
+        emberAfBarrierControlClusterBarrierControlGoToPercentCallback((CommandHandler *)opaque_ptr, command_path,
+                                                                      command_data);
+    }
+    return ESP_OK;
+}
+
+static esp_err_t esp_matter_command_callback_barrier_control_stop(const ConcreteCommandPath &command_path,
+                                                                  TLVReader &tlv_data, void *opaque_ptr)
+{
+    chip::app::Clusters::BarrierControl::Commands::BarrierControlStop::DecodableType command_data;
+    CHIP_ERROR error = Decode(tlv_data, command_data);
+    if (error == CHIP_NO_ERROR) {
+        emberAfBarrierControlClusterBarrierControlStopCallback((CommandHandler *)opaque_ptr, command_path,
+                                                               command_data);
+    }
+    return ESP_OK;
+}
+
 static esp_err_t esp_matter_command_callback_instance_action(const ConcreteCommandPath &command_path,
                                                              TLVReader &tlv_data, void *opaque_ptr)
 {
@@ -2108,6 +2132,25 @@ command_t *create_go_to_tilt_percentage(cluster_t *cluster)
 
 } /* command */
 } /* window_covering */
+
+namespace barrier_control {
+namespace command {
+
+command_t *create_barrier_control_go_to_percent(cluster_t *cluster)
+{
+    return esp_matter::command::create(cluster, BarrierControl::Commands::BarrierControlGoToPercent::Id,
+                                       COMMAND_FLAG_ACCEPTED,
+                                       esp_matter_command_callback_barrier_control_go_to_percent);
+}
+
+command_t *create_barrier_control_stop(cluster_t *cluster)
+{
+    return esp_matter::command::create(cluster, BarrierControl::Commands::BarrierControlStop::Id, COMMAND_FLAG_ACCEPTED,
+                                       esp_matter_command_callback_barrier_control_stop);
+}
+
+} // namespace command
+} // namespace barrier_control
 
 } /* cluster */
 } /* esp_matter */

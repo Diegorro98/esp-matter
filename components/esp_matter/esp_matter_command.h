@@ -251,5 +251,12 @@ command_t *create_go_to_tilt_percentage(cluster_t *cluster);
 } /* command */
 } /* window_covering */
 
+namespace barrier_control {
+namespace command {
+command_t *create_barrier_control_go_to_percent(cluster_t *cluster);
+command_t *create_barrier_control_stop(cluster_t *cluster);
+} /* command */
+} /* barrier_controll */
+
 } /* cluster */
 } /* esp_matter */

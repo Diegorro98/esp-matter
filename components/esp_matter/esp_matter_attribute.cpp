@@ -1451,6 +1451,63 @@ attribute_t *create_safety_status(cluster_t *cluster, uint16_t value)
 } /* attribute */
 } /* window_covering */
 
+namespace barrier_control {
+namespace attribute {
+attribute_t *create_barrier_moving_state(cluster_t *cluster, uint8_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierMovingState::Id,
+                                         ATTRIBUTE_FLAG_OVERRIDE, esp_matter_enum8(value));
+}
+
+attribute_t *create_barrier_safety_status(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierSafetyStatus::Id,
+                                         ATTRIBUTE_FLAG_NONE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_capabilities(cluster_t *cluster, uint8_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierCapabilities::Id,
+                                         ATTRIBUTE_FLAG_NONE, esp_matter_bitmap8(value));
+}
+attribute_t *create_barrier_open_events(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierOpenEvents::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_close_events(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierCloseEvents::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_command_open_events(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierCommandOpenEvents::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_command_close_events(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierCommandCloseEvents::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_open_period(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierOpenPeriod::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_close_period(cluster_t *cluster, uint16_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierClosePeriod::Id,
+                                         ATTRIBUTE_FLAG_NONVOLATILE, esp_matter_bitmap16(value));
+}
+attribute_t *create_barrier_position(cluster_t *cluster, uint8_t value)
+{
+    return esp_matter::attribute::create(cluster, BarrierControl::Attributes::BarrierPosition::Id,
+                                         ATTRIBUTE_FLAG_NONE, esp_matter_enum8(value));
+}
+
+} // namespace attribute
+} // namespace barrier_control
+
 namespace switch_cluster {
 namespace attribute {
 
