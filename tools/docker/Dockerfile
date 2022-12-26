@@ -40,6 +40,7 @@ ARG ESP_MATTER_CHECKOUT_REF=
 ARG ESP_MATTER_CLONE_SHALLOW=
 
 ENV ESP_MATTER_PATH=$IDF_TOOLS_PATH/esp-matter
+ENV MATTER_PATH=$ESP_MATTER_PATH/connectedhomeip/connectedhomeip
 
 RUN echo ESP_MATTER_CHECKOUT_REF=$ESP_MATTER_CHECKOUT_REF ESP_MATTER_CLONE_BRANCH_OR_TAG=$ESP_MATTER_CLONE_BRANCH_OR_TAG && \
     if [ -n "$ESP_MATTER_CLONE_SHALLOW" ]; then \
@@ -60,10 +61,17 @@ RUN echo ESP_MATTER_CHECKOUT_REF=$ESP_MATTER_CHECKOUT_REF ESP_MATTER_CLONE_BRANC
     fi && \
     if [ -n "$ESP_MATTER_CLONE_SHALLOW" ]; then \
       git submodule update --init --depth=1 && \
-      ./connectedhomeip/connectedhomeip/scripts/checkout_submodules.py --platform esp32 --shallow; \
+      $MATTER_PATH/scripts/checkout_submodules.py --platform esp32 --shallow; \
     fi
 
-RUN /bin/bash -c "source ${ESP_MATTER_PATH}/connectedhomeip/connectedhomeip/scripts/bootstrap.sh"
+SHELL ["/bin/bash", "-c"]
+RUN source $MATTER_PATH/scripts/bootstrap.sh && \
+    # Build host tools
+    gn --root="$MATTER_PATH" gen $MATTER_PATH/out/host && \
+    ninja -C $MATTER_PATH/out/host
+
+# Installing python dependencies for mfg_tool
+RUN python3 -m pip install -r $ESP_MATTER_PATH/tools/mfg_tool/requirements.txt
 
 COPY entrypoint.sh /opt/esp/entrypoint.sh
 ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
