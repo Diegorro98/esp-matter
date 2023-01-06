@@ -73,6 +73,10 @@ RUN source $MATTER_PATH/scripts/bootstrap.sh && \
 # Installing python dependencies for mfg_tool
 RUN python3 -m pip install -r $ESP_MATTER_PATH/tools/mfg_tool/requirements.txt
 
+# Installing python dependencies for Matter
+RUN . $IDF_PATH/export.sh && \
+    python3 -m pip install -r $ESP_MATTER_PATH/requirements.txt
+
 COPY entrypoint.sh /opt/esp/entrypoint.sh
 ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
