@@ -2,7 +2,7 @@ ARG ESP_IDF_TAG=v4.4.3
 FROM espressif/idf:${ESP_IDF_TAG} as idf
 
 ARG VERSION=latest
-FROM connectedhomeip/chip-build:${VERSION}
+FROM connectedhomeip/chip-build:latest
 
 ENV IDF_PATH=/opt/espressif/esp-idf/
 ENV IDF_TOOLS_PATH=/opt/espressif/tools
