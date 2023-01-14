@@ -1,5 +1,19 @@
+ARG ESP_IDF_TAG=v4.4.3
+FROM espressif/idf:${ESP_IDF_TAG} as idf
+
 ARG VERSION=latest
-FROM connectedhomeip/chip-build-esp32:${VERSION} as build
+FROM connectedhomeip/chip-build:${VERSION}
+
+ENV IDF_PATH=/opt/espressif/esp-idf/
+ENV IDF_TOOLS_PATH=/opt/espressif/tools
+
+COPY --from=idf /opt/esp/idf /opt/espressif/esp-idf
+
+# Setup the ESP-IDF
+WORKDIR /opt/espressif/esp-idf
+RUN set -x \
+    && ./install.sh \
+    && : # last line
 
 # To build the image for a branch or a tag of ESP-MATTER, pass --build-arg ESP_MATTER_CLONE_BRANCH_OR_TAG=name.
 # To build the image with a specific commit ID of ESP-MATTER, pass --build-arg ESP_MATTER_CHECKOUT_REF=commit-id.

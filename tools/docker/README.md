@@ -16,6 +16,7 @@ docker run --rm -v $PWD:/project -w /project espressif/esp-matter:latest idf.py 
 The Dockerfile in Espressif's SDK for Matter repository provides several build arguments which can be used to customize the Docker image:
 
 These are the different build arguments that can be used:
+- ``ESP_IDF_TAG``: Espressif idf Docker image tag, default is v4.4.3. Check all the available tags at [Docker Hub](https://hub.docker.com/r/espressif/idf/tags).
 - ``ESP_MATTER_CLONE_URL``: URL of the repository to clone Espressif's SDK for Matter. Can be set to a custom URL when working with a fork of Espressif's SDK for Matter. Default is ``https://github.com/espressif/esp-matter.git``.
 - ``ESP_MATTER_CLONE_BRANCH_OR_TAG``: Name of a git branch or tag use when cloning Espressif's SDK for Matter. This value is passed to ``git clone`` command using the ``--branch`` argument. Default is ``main``.
 - ``ESP_MATTER_CHECKOUT_REF``: If this argument is set to a non-empty value, ``git checkout $ESP_MATTER_CHECKOUT_REF`` command will be performed after cloning. This argument can be set to the SHA of the specific commit to check out, for example if some specific commit on a release branch is desired.
